@@ -1,0 +1,27 @@
+import pandas as pd
+import numpy as np
+
+def optimize_memory(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Optimise l'usage mémoire du DataFrame en ajustant les types de données.
+    Exemple: float64 vers float32, int64 vers int32.
+    """
+    # Copie pour ne pas modifier l'original par accident
+    df_optimized = df.copy()
+    
+    for col in df_optimized.columns:
+        col_type = df_optimized[col].dtype
+        
+        # Optimisation des entiers
+        if str(col_type).startswith('int'):
+            df_optimized[col] = pd.to_numeric(df_optimized[col], downcast='integer')
+        # Optimisation des nombres à virgule
+        elif str(col_type).startswith('float'):
+            df_optimized[col] = pd.to_numeric(df_optimized[col], downcast='float')
+            
+    return df_optimized
+
+def load_data(file_path: str) -> pd.DataFrame:
+    """Charge le dataset médical et applique l'optimisation."""
+    df = pd.read_csv(file_path)
+    return optimize_memory(df)
