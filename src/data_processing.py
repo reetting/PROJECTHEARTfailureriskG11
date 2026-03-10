@@ -25,3 +25,11 @@ def load_data(file_path: str) -> pd.DataFrame:
     """Charge le dataset médical et applique l'optimisation."""
     df = pd.read_csv(file_path)
     return optimize_memory(df)
+def handle_outliers(df):
+    Q1 = df.quantile(0.25)
+    Q3 = df.quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    df = df.clip(lower=lower_bound, upper=upper_bound, axis=1)
+    return df
