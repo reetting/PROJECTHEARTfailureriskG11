@@ -93,3 +93,4 @@ if __name__ == "__main__":
     evaluate_all_models(trained_models, X_test, y_test)
 
     print("\nEntraînement terminé ✓")
+save_model(trained_models["LightGBM"])
