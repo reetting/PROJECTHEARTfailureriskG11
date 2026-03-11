@@ -2,9 +2,6 @@ import os
 import pickle
 from src.train_model import MODELS,train_all_models
 from src.data_processing import load_data, handle_outliers, optimize_memory
-from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier
-from lightgbm import LGBMClassifier
 from sklearn.metrics import roc_auc_score, f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold, cross_val_score
