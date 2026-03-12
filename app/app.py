@@ -7,7 +7,6 @@ Corrections :
   - Suppression des imports dupliqués dans les tabs
   - Typage et formatage cohérents
 """
-
 import streamlit as st
 import pandas as pd
 import numpy as np
