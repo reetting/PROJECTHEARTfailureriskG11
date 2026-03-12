@@ -8,7 +8,7 @@ from sklearn.model_selection import KFold, cross_val_score
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
 
-def evaluate_all_models(trained_models: dict, X_test, y_test) -> None:
+def evaluate_all_models(trained_models: dict, X_test, y_test) -> None:#ici on evalue la performance de chaque modele entrainer 
     kf = KFold(n_splits=5, random_state=42, shuffle=True)
 
     for name, model in trained_models.items():
@@ -28,13 +28,12 @@ def evaluate_all_models(trained_models: dict, X_test, y_test) -> None:
         print(f"  F1-Score  : {f1_score(y_test, y_pred):.3f}")
         print(f"  CV-Score  : {cv_scores.mean():.3f} ± {cv_scores.std():.3f} ➕")
     
-def save_model(model, path: str = "models/best_model.pkl") -> None:
-    """Sauvegarde le modèle choisi."""
-    os.makedirs(os.path.dirname(path), exist_ok=True)
+def save_model(model, path: str = "models/best_model.pkl") -> None: # On sauvegarde le modele choisi avec cette fonction avec le chemin models/best_model.pkl
+    os.makedirs(os.path.dirname(path), exist_ok=True) # on cree le dossier models si il n'existe pas 
     with open(path, "wb") as f:
         pickle.dump(model, f)
     print(f"\nModèle sauvegardé → {path}")
-
+# le but c'est de mettre le modele dans un dossier et fermer le dossier 
 
 def load_model(path: str = "models/best_model.pkl"):
     """Charge le modèle sauvegardé."""
