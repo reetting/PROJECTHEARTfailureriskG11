@@ -10,3 +10,5 @@ matplotlib
 seaborn
 joblib
 pytest
+plotly
+ucimlrepo
