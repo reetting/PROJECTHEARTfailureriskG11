@@ -160,20 +160,20 @@ def create_gauge_chart(probability):
         value=probability * 100,
         number={"suffix": "%", "font": {"size": 40, "color": color, "family": "Inter"}},
         gauge={
-            "axis": {"range":[0, 100], "tickwidth": 1, "tickcolor": "#EAEAEA"},
+            "axis": {"range":[0, 100], "tickwidth": 1, "tickcolor": "#E2D3D3"},
             "bar": {"color": color, "thickness": 0.2},
             "bgcolor": "white",
             "borderwidth": 0,
             "steps": [
-                {"range": [0, 40], "color": "#F0F7F6"},  # Vert d'eau très clair
+                {"range": [0, 40], "color": "#D1FFF8"},  # Vert d'eau très clair
                 {"range":[40, 65], "color": "#FEF5EC"}, # Sable très clair
-                {"range":[65, 100], "color": "#FDF0ED"},# Terre cuite très clair
+                {"range":[65, 100], "color": "#FFB19F"},# Terre cuite très clair
             ],
         }
     ))
     fig.update_layout(
         height=250, margin=dict(t=20, b=10, l=10, r=10),
-        paper_bgcolor="rgba(0,0,0,0)", font={'color': "#555555"}
+        paper_bgcolor="rgba(0,0,0,0)", font={'color': "#BBA9A9"}
     )
     return fig
 
@@ -197,8 +197,8 @@ def create_shap_plot(model, X_test):
     
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.spines["bottom"].set_color('#EAEAEA')
-    ax.spines["left"].set_color('#EAEAEA')
+    ax.spines["bottom"].set_color("#FFD0D0")
+    ax.spines["left"].set_color("#666262")
     ax.tick_params(colors='#555')
     
     plt.tight_layout()
@@ -330,4 +330,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
