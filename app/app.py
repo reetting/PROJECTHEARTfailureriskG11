@@ -149,8 +149,8 @@ def shap_plot(model, X_test: pd.DataFrame) -> plt.Figure:
     importance_df["Feature"] = importance_df["Feature"].str.replace("_", " ").str.title()
 
     fig, ax = plt.subplots(figsize=(8, 5))
-    fig.patch.set_facecolor('transparent')
-    ax.set_facecolor('transparent')
+    fig.patch.set_facecolor('none')
+    ax.set_facecolor('none')
     
     ax.barh(importance_df["Feature"], importance_df["Importance"], color=COLOR_DANGER, alpha=0.85, edgecolor="white", height=0.5)
     ax.set_xlabel("Impact moyen sur la prédiction (|SHAP|)", fontsize=10, color="#4A3C31")
@@ -301,13 +301,13 @@ with tab3:
     
     cm = confusion_matrix(y_test, y_pred)
     fig_cm, ax = plt.subplots(figsize=(6, 4))
-    fig_cm.patch.set_facecolor('transparent')
+    fig_cm.patch.set_facecolor('none')
     sns.heatmap(cm, annot=True, fmt="d", cmap="OrRd", # Palette chaude "Orange-Red"
                 xticklabels=["Survie", "Décès"],
                 yticklabels=["Survie", "Décès"], ax=ax, 
                 cbar_kws={'label': 'Nombre de patients'})
     ax.set_ylabel("Réalité", color="#4A3C31", fontweight='bold')
-    ax.set_xlabel("Prédiction de l'IA", color="#4A3C31", fontweight='bold')
+    ax.set_xlabel("Prédiction de l'IA", color="#775F4D", fontweight='bold')
     ax.tick_params(colors='#4A3C31')
     st.pyplot(fig_cm)
     st.markdown("</div>", unsafe_allow_html=True)
