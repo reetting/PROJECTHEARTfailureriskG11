@@ -7,7 +7,7 @@ warnings.filterwarnings("ignore", category=UserWarning, module="shap")
 warnings.filterwarnings("ignore", message=".*use_container_width.*")
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+from SHAP import get_shap_explainer, compute_shap_values, plot_waterfall_single, get_top_features
 """
 app.py — Interface Streamlit pour CardioCare AI
 Design professionnel + Glassmorphism + Fonds Animés + Traduction FR
@@ -244,44 +244,19 @@ def risk_gauge(probability: float) -> go.Figure:
     )
     return fig
 
-def shap_plot(model, X_train: pd.DataFrame) -> plt.Figure:
-    explainer   = shap.TreeExplainer(model)
-    shap_values = explainer.shap_values(X_train)
+@st.cache_data
+def get_test_data():
+    df = load_data(DATA_PATH)
+    df = handle_outliers(df)
+    df = optimize_memory(df)
 
-    if isinstance(shap_values, list):
-        shap_values = shap_values[1]
+    X = df[FEATURE_NAMES]
+    y = df["DEATH_EVENT"]
 
-    mean_shap = np.abs(shap_values).mean(axis=0)
-
-    fr_feature_names = {
-        "age": "Âge", "anaemia": "Anémie", "creatinine_phosphokinase": "Enzyme CPK",
-        "diabetes": "Diabète", "ejection_fraction": "Fraction d'éjection", 
-        "high_blood_pressure": "Hypertension", "platelets": "Plaquettes",
-        "serum_creatinine": "Créatinine sérique", "serum_sodium": "Sodium sérique", 
-        "sex": "Sexe", "smoking": "Fumeur", "time": "Période de suivi"
-    }
-
-    importance_df = pd.DataFrame({
-        "Feature":[fr_feature_names.get(f, f) for f in FEATURE_NAMES],
-        "Importance": mean_shap
-    }).sort_values("Importance", ascending=True)
-
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.barh(importance_df["Feature"], importance_df["Importance"], color="#3498DB", edgecolor="none", height=0.6)
-    ax.set_xlabel("Impact moyen sur la prédiction (Valeur SHAP absolue)", fontsize=11, color="#34495E")
-    
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["left"].set_color("#BDC3C7")
-    ax.spines["bottom"].set_color("#BDC3C7")
-    ax.tick_params(axis='x', colors='#7F8C8D')
-    ax.tick_params(axis='y', colors='#2C3E50', labelsize=10)
-    ax.grid(axis='x', linestyle='--', alpha=0.3)
-    
-    fig.patch.set_alpha(0)
-    plt.tight_layout()
-    return fig
-
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=y
+    )
+    return X_train, X_test, y_test
 # ==========================================
 # 4. INTERFACE UTILISATEUR : EN-TÊTE
 # ==========================================
