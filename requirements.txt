@@ -19,10 +19,9 @@ xgboost
 lightgbm
 imbalanced-learn
 shap
-streamlit
-matplotlib
 seaborn
 joblib
 pytest
 plotly
 ucimlrepo
+altair
