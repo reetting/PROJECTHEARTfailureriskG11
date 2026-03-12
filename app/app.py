@@ -229,11 +229,21 @@ with st.sidebar:
     st.markdown("<h2 style='text-align:center; color:#FFFFFF; font-weight:300;'>📋 Données Patient</h2>", unsafe_allow_html=True)
     st.markdown("---")
 
+<<<<<<< HEAD
     st.markdown("<h4 style='color:#AAB7B8;'>👤 Profil & Constantes</h4>", unsafe_allow_html=True)
     age               = st.slider("Âge (années)", 18, 95, 60)
     sex               = st.radio("Sexe", ["Femme", "Homme"], horizontal=True)
     time              = st.slider("Période de suivi (jours)", 4, 285, 100)
     ejection_fraction = st.slider("Fraction d'éjection (%)", 14, 80, 38)
+=======
+    age                      = st.slider("Age (years)", 40, 95, 60)
+    ejection_fraction        = st.slider("Ejection Fraction (%)", 14, 80, 38)
+    serum_creatinine         = st.number_input("Serum Creatinine (mg/dL)",  0.5,   10.0,  1.2,    step=0.1)
+    serum_sodium             = st.number_input("Serum Sodium (mEq/L)",     110.0, 150.0, 137.0,   step=1.0)  # FIX: float pour cohérence
+    creatinine_phosphokinase = st.number_input("CPK Enzyme (mcg/L)",        20,   8000,  250,     step=10)
+    platelets                = st.number_input("Platelets (kiloplatelets/mL)", 25000, 850000, 265000, step=5000)
+    time                     = st.slider("Follow-up period (days)", 4, 285, 100)
+>>>>>>> bca8412 (mod)
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<h4 style='color:#AAB7B8;'>🩸 Analyses Sanguines</h4>", unsafe_allow_html=True)
