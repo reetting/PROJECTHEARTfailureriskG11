@@ -25,3 +25,4 @@ pytest
 plotly
 ucimlrepo
 altair
+streamlit>=1.30.0
