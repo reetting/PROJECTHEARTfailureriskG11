@@ -20,8 +20,8 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from data_processing import load_data, handle_outliers, optimize_memory
-from train_model import train_all_models
+from src.data_processing import load_data, handle_outliers, optimize_memory
+from src.train_model import train_all_models
 from sklearn.metrics import (
     accuracy_score, roc_auc_score, f1_score, confusion_matrix
 )
