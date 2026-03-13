@@ -24,7 +24,7 @@ import seaborn as sns
 
 sys.path.insert(0, os.path.dirname(__file__))
 from src.data_processing import load_data, handle_outliers, optimize_memory
-from SHAP import get_shap_explainer, compute_shap_values, plot_waterfall_single, get_top_features
+from src.SHAP import get_shap_explainer, compute_shap_values, plot_waterfall_single, get_top_features
 
 # ==========================================
 # 1. CONFIGURATION & CSS
