@@ -24,17 +24,193 @@ import seaborn as sns
 
 sys.path.insert(0, os.path.dirname(__file__))
 from src.data_processing import load_data, handle_outliers, optimize_memory
-from src.SHAP import get_shap_explainer, compute_shap_values, plot_waterfall_single, get_top_features
+from SHAP import get_shap_explainer, compute_shap_values, plot_waterfall_single, get_top_features
+st.markdown("""
+    <style>
+        /* Importer typographie douce */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;800;900&display=swap');
+
+        /* Réinitialisation de l'interface Streamlit */
+        html, body, [class*="css"] {
+            font-family: 'Nunito', sans-serif !important;
+            color: #4A403B !important; /* Marron gris très doux */
+        }[data-testid="stSidebar"],[data-testid="stHeader"] { display: none !important; }
+        .block-container { max-width: 1300px; padding-top: 2rem; padding-bottom: 2rem; }
+
+        /* FOND ANIMÉ : DÉGRADÉ CHALEUREUX ET RASSURANT */
+        .stApp {
+            background: linear-gradient(-45deg, #FDFBF7, #FFF5ED, #FEF9F0, #FDFBF7);
+            background-size: 400% 400%;
+            animation: warmBreeze 20s ease-in-out infinite;
+            overflow-x: hidden;
+        }
+        @keyframes warmBreeze {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* TYPOGRAPHIE & COULEURS ACCENTS CHAUDES */
+        h1, h2, h3, h4 { color: #3A302B !important; letter-spacing: -0.02em; }
+        .accent-text { color: #E28743; } /* Orange doux/pêche */
+        .danger-text { color: #D65A31; } /* Corail/Rouille */
+        .safe-text { color: #6C9A7A; } /* Vert sauge doux */
+        .sub-text { color: #8B7E74 !important; }
+
+        /* ANIMATION DE TRANSITION DE PAGE (Page Fade) */
+        .page-animate {
+            animation: slideFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        @keyframes slideFadeIn {
+            0% { opacity: 0; transform: translateY(15px) scale(0.99); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* GLASSMORPHISM CARDS CHALEUREUSES */[data-testid="stVerticalBlockBorderWrapper"] {
+            background: rgba(255, 255, 255, 0.7) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9) !important;
+            border-radius: 24px !important;
+            box-shadow: 0 10px 30px rgba(139, 100, 70, 0.06);
+            transition: all 0.3s ease;
+        }[data-testid="stVerticalBlockBorderWrapper"]:hover {
+            box-shadow: 0 15px 40px rgba(139, 100, 70, 0.12);
+            transform: translateY(-2px);
+        }
+
+        /* NAVIGATION TOP CUSTOM */
+        .nav-container div.stButton > button {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(226, 135, 67, 0.2);
+            color: #8B7E74 !important;
+            font-weight: 700;
+            border-radius: 16px;
+            padding: 12px 24px;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .nav-container div.stButton > button:hover {
+            background: #FFF;
+            border: 1px solid #E28743;
+            color: #E28743 !important;
+            box-shadow: 0 6px 15px rgba(226, 135, 67, 0.15);
+        }
+        .nav-active div.stButton > button {
+            background: #E28743;
+            border: 1px solid #E28743;
+            color: #FFFFFF !important;
+            box-shadow: 0 8px 20px rgba(226, 135, 67, 0.25);
+        }
+
+        /* BOUTON ACTION PRINCIPAL */
+        .action-btn div.stButton > button {
+            background: linear-gradient(135deg, #E28743, #D65A31);
+            color: white !important;
+            font-weight: 800; font-size: 1.1rem; letter-spacing: 0.5px;
+            border-radius: 16px; border: none; padding: 15px; width: 100%;
+            box-shadow: 0 8px 25px rgba(214, 90, 49, 0.3);
+            transition: all 0.3s;
+        }
+        .action-btn div.stButton > button:hover {
+            box-shadow: 0 12px 30px rgba(214, 90, 49, 0.4);
+            transform: scale(1.02);
+        }
+
+        /* HEARTBEAT VISUALIZER (ECG) DOUX */
+        .ecg-container {
+            width: 100%; height: 70px; overflow: hidden; position: relative;
+            margin-bottom: -15px;
+        }
+        .ecg-line {
+            fill: none; stroke: #E28743; stroke-width: 2.5;
+            stroke-linecap: round; stroke-linejoin: round;
+            stroke-dasharray: 1500; stroke-dashoffset: 1500;
+            animation: drawECG 4s linear infinite;
+            filter: drop-shadow(0 3px 4px rgba(226, 135, 67, 0.3));
+        }
+        @keyframes drawECG { to { stroke-dashoffset: 0; } }
+
+        /* RESULTAT SPECTACULAIRE */
+        .massive-score-container {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px; text-align: center;
+        }
+        .score-circle {
+            width: 260px; height: 260px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+            background: #FFFFFF;
+            font-size: 4.5rem; font-weight: 900;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+        }
+        /* Vitesses de pulsations cardiaques douces */
+        @keyframes pulseSoft {
+            0% { transform: scale(0.98); box-shadow: 0 0 0 0 var(--pulse-color); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 40px rgba(0,0,0,0); }
+            100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(0,0,0,0); }
+        }
+        .pulse-slow   { --pulse-color: rgba(108, 154, 122, 0.4); border: 4px solid #6C9A7A; color: #6C9A7A; animation: pulseSoft 2.5s infinite; }
+        .pulse-medium { --pulse-color: rgba(226, 135, 67, 0.4); border: 4px solid #E28743; color: #E28743; animation: pulseSoft 1.5s infinite; }
+        .pulse-fast   { --pulse-color: rgba(214, 90, 49, 0.5); border: 4px solid #D65A31; color: #D65A31; animation: pulseSoft 0.8s infinite; }
+
+        /* SCANNER LOADING (Écran d'accueil doux) */
+        .scanner-screen {
+            height: 85vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: #E28743; text-align: center;
+        }
+        .soft-pulse-loader {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: #E28743; margin-bottom: 30px;
+            animation: pulseSoftLoader 2s infinite;
+        }
+        @keyframes pulseSoftLoader {
+            0% { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(226, 135, 67, 0.4); }
+            70% { transform: scale(1); opacity: 0.2; box-shadow: 0 0 0 40px rgba(226, 135, 67, 0); }
+            100% { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(226, 135, 67, 0); }
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+
+# ==========================================
+# 4. ÉCRAN DE CHARGEMENT "SÉRÉNITÉ"
+# ==========================================
+if st.session_state.app_state == "booting":
+    st.markdown("""
+        <div class="scanner-screen">
+            <div class="soft-pulse-loader"></div>
+            <h1 style="font-size: 3rem; color: #3A302B;">Préparation de votre espace<span style="color: #E28743;">.</span></h1>
+            <p style="color: #8B7E74; font-size: 1.1rem; margin-top: 10px;">Initialisation des algorithmes de santé en toute sécurité...</p>
+        </div>
+    """, unsafe_allow_html=True)
+    time.sleep(2)
+    st.session_state.app_state = "ready"
+    st.rerun()
 
 # ==========================================
 # 1. CONFIGURATION & CSS
 # ==========================================
 st.set_page_config(
-    page_title="CardioCare AI",
+    page_title="CardioCare | Sérénité",
     page_icon="🧡",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
+
+
+# Initialisation de la machine à états (SPA)
+if "app_state" not in st.session_state:
+    st.session_state.app_state = "booting"
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "input"
+if "proba" not in st.session_state:
+    st.session_state.proba = None
+if "patient_data" not in st.session_state:
+    st.session_state.patient_data = None
 
 st.markdown("""
     <style>
@@ -141,20 +317,6 @@ st.markdown("""
         [data-testid="stMetricValue"] { color: #2C3E50 !important; }
         hr { border: 0; border-top: 1px solid rgba(0,0,0,0.05); margin: 1.5rem 0;}
         .text-muted { color: #7F8C8D; font-size: 1.1rem; }
-
-        /* ECG ANIMATION */
-        .ecg-container {
-            width: 100%; height: 70px; overflow: hidden; position: relative;
-            margin-bottom: -15px;
-        }
-        .ecg-line {
-            fill: none; stroke: #2980B9; stroke-width: 2.5;
-            stroke-linecap: round; stroke-linejoin: round;
-            stroke-dasharray: 1500; stroke-dashoffset: 1500;
-            animation: drawECG 4s linear infinite;
-            filter: drop-shadow(0 3px 4px rgba(41, 128, 185, 0.4));
-        }
-        @keyframes drawECG { to { stroke-dashoffset: 0; } }
     </style>
 """, unsafe_allow_html=True)
 
@@ -202,13 +364,13 @@ def risk_gauge(probability: float) -> go.Figure:
         mode="gauge+number",
         value=round(probability * 100, 1),
         number={"suffix": "%", "font": {"size": 45, "color": color, "family": "Arial"}},
-        title={"text": "Indice de Risque", "font": {"size": 18, "color": "#6FA39A"}},
+        title={"text": "Indice de Risque", "font": {"size": 18, "color": "#7F8C8D"}},
         gauge={
             "axis": {"range": [0, 100], "tickwidth": 1, "tickcolor": "darkblue"},
             "bar": {"color": color, "thickness": 0.25},
             "bgcolor": "rgba(255,255,255,0.5)",
             "borderwidth": 2,
-            "bordercolor": "#96BE88",
+            "bordercolor": "#EAEDED",
             "steps": [
                 {"range": [0,  40], "color": "rgba(46, 204, 113, 0.15)"},
                 {"range": [40, 65], "color": "rgba(241, 196, 15, 0.15)"},
@@ -225,7 +387,7 @@ def risk_gauge(probability: float) -> go.Figure:
     return fig
 
 # ==========================================
-# 5. EN-TÊTE AVEC ECG
+# 5. EN-TÊTE
 # ==========================================
 st.markdown("""
     <div class="ecg-container">
@@ -241,7 +403,6 @@ st.markdown("""
     </div>
     <hr/>
 """, unsafe_allow_html=True)
-
 # ==========================================
 # 6. SIDEBAR
 # ==========================================
@@ -378,7 +539,7 @@ with tab2:
     ax.barh(
         [FEATURE_NAMES[i] for i in sorted_idx],
         mean_abs[sorted_idx],
-        color="#E74C3C", edgecolor="none", height=0.6
+        color="#E74C3C", edgecolor="white", height=0.6
     )
     ax.set_xlabel("Mean |SHAP Value|", fontsize=12)
     ax.set_title("Importance globale des features — SHAP", fontsize=14, fontweight="bold")
@@ -393,8 +554,6 @@ with tab2:
         st.markdown("#### 🧬 Explication individuelle — Ce patient")
         X_input      = pd.DataFrame([patient])[FEATURE_NAMES]
         patient_shap = compute_shap_values(explainer, X_input)
-        if patient_shap.ndim > 1:
-            patient_shap = patient_shap[0:1]
         top_features = get_top_features(patient_shap, FEATURE_NAMES, top_n=5)
 
         st.markdown("**Top 5 facteurs de risque pour ce patient :**")
@@ -404,7 +563,7 @@ with tab2:
 
         waterfall_path = "/tmp/patient_waterfall.png"
         plot_waterfall_single(explainer, X_input, FEATURE_NAMES, save_path=waterfall_path)
-        st.image(waterfall_path, use_container_width=True)
+        st.image(waterfall_path, use_column_width=True)
     else:
         st.info("👈 Faites une prédiction d'abord pour voir l'explication individuelle")
 
