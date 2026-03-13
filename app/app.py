@@ -12,7 +12,7 @@ from src.SHAP import get_shap_explainer, compute_shap_values, plot_waterfall_sin
 app.py — Interface Streamlit pour CardioCare AI
 Design professionnel + Glassmorphism + Fonds Animés + Traduction FR
 """
-
+import pickle
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -314,7 +314,9 @@ patient = {
 # ==========================================
 # 6. EXÉCUTION DU MODÈLE
 # ==========================================
-model, scaler, X_train, X_test, y_test = get_model()
+model                   = get_model()
+X_train, X_test, y_test = get_test_data()
+explainer               = get_shap_explainer(model, X_train)
 
 if predict_btn or "proba" not in st.session_state:
     X_input        = pd.DataFrame([patient])[FEATURE_NAMES]
