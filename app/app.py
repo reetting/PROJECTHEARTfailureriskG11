@@ -32,7 +32,7 @@ from src.SHAP import get_shap_explainer, compute_shap_values, plot_waterfall_sin
 # ==========================================
 st.set_page_config(
     page_title="CardioCare AI",
-    page_icon="🫀",
+    page_icon="🧡",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
