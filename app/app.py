@@ -2,7 +2,7 @@ import os
 import sys
 import pickle
 import warnings
-import time
+import uuid
 
 warnings.filterwarnings("ignore", category=UserWarning, module="shap")
 warnings.filterwarnings("ignore", message=".*use_container_width.*")
@@ -15,6 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use("Agg")
+import plotly.graph_objects as go
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
     accuracy_score, roc_auc_score, f1_score,
@@ -27,30 +28,17 @@ from src.data_processing import load_data, handle_outliers, optimize_memory
 from src.SHAP import get_shap_explainer, compute_shap_values, plot_waterfall_single, get_top_features
 
 # ==========================================
-# 1. CONFIGURATION & STATE MANAGEMENT
+# 1. CONFIGURATION INITIALE
 # ==========================================
 st.set_page_config(
-    page_title="CardioCare | Sérénité",
-    page_icon="🧡",
+    page_title="CardioCare AI",
+    page_icon="🫀",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
-# Forcer le fond blanc/clair pour les graphiques matplotlib
-plt.style.use('default')
-
-# Initialisation de la machine à états (SPA)
-if "app_state" not in st.session_state:
-    st.session_state.app_state = "booting"
-if "current_page" not in st.session_state:
-    st.session_state.current_page = "input"
-if "proba" not in st.session_state:
-    st.session_state.proba = None
-if "patient_data" not in st.session_state:
-    st.session_state.patient_data = None
-
 # ==========================================
-# 2. CHARGEMENT DU MOTEUR ML
+# 2. CONSTANTES & CHARGEMENT
 # ==========================================
 FEATURE_NAMES =[
     "age", "anaemia", "creatinine_phosphokinase", "diabetes",
@@ -64,454 +52,371 @@ MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "best_model
 @st.cache_resource(show_spinner=False)
 def get_model():
     with open(MODEL_PATH, "rb") as f:
-        return pickle.load(f)
+        model = pickle.load(f)
+    return model
 
 @st.cache_data(show_spinner=False)
 def get_test_data():
     df = load_data(DATA_PATH)
     df = handle_outliers(df)
     df = optimize_memory(df)
-    X, y = df[FEATURE_NAMES], df["DEATH_EVENT"]
-    return train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+    X = df[FEATURE_NAMES]
+    y = df["DEATH_EVENT"]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+    return X_train, X_test, y_test
 
 model = get_model()
-X_train, X_test, y_train, y_test = get_test_data()
+X_train, X_test, y_test = get_test_data()
 explainer = get_shap_explainer(model, X_train)
 
 # ==========================================
-# 3. MOTEUR CSS : "WARM CLINICAL" & ANIMATIONS
+# 3. ÉTAT DE SESSION & NAVIGATION
 # ==========================================
-st.markdown("""
+if "proba" not in st.session_state:
+    st.session_state["proba"] = None
+
+# Menu de navigation principal
+st.sidebar.markdown("<h2 style='color: white; font-weight: 800; text-align: center; margin-bottom: 20px;'>🫀 CardioCare<span style='color: #38BDF8;'>AI</span></h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<p style='color: #94A3B8; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;'>Menu Principal</p>", unsafe_allow_html=True)
+page = st.sidebar.radio(
+    "Navigation", 
+    ["🏥 Tableau de Bord Patient", "🧠 Explicabilité IA (SHAP)", "⚙️ Santé du Modèle"],
+    label_visibility="collapsed"
+)
+st.sidebar.markdown("<hr style='border-color: rgba(255,255,255,0.1);'>", unsafe_allow_html=True)
+
+# ==========================================
+# 4. MOTEUR D'ANIMATION & CSS AVANCÉ
+# ==========================================
+# Astuce : On génère un ID unique basé sur le nom de la page pour forcer Streamlit 
+# à rejouer l'animation CSS à CHAQUE changement de rubrique dans le menu.
+anim_id = hash(page)
+
+st.markdown(f"""
     <style>
-        /* Importer typographie douce */
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;800;900&display=swap');
+        /* --- Importation Typographie --- */
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        html, body, [class*="css"] {{
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            color: #0F172A;
+        }}
 
-        /* Réinitialisation de l'interface Streamlit */
-        html, body, [class*="css"] {
-            font-family: 'Nunito', sans-serif !important;
-            color: #4A403B !important; /* Marron gris très doux */
-        }[data-testid="stSidebar"],[data-testid="stHeader"] { display: none !important; }
-        .block-container { max-width: 1300px; padding-top: 2rem; padding-bottom: 2rem; }
-
-        /* FOND ANIMÉ : DÉGRADÉ CHALEUREUX ET RASSURANT */
-        .stApp {
-            background: linear-gradient(-45deg, #FDFBF7, #FFF5ED, #FEF9F0, #FDFBF7);
-            background-size: 400% 400%;
-            animation: warmBreeze 20s ease-in-out infinite;
+        /* --- Arrière-plan Animé : Orbes Biomédicales en lévitation --- */
+        .stApp {{
+            background-color: #F8FAFC;
             overflow-x: hidden;
-        }
-        @keyframes warmBreeze {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        }}
+        .bg-orb {{
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            animation: float 20s infinite ease-in-out alternate;
+            opacity: 0.6;
+        }}
+        .orb-1 {{ top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #E0F2FE 0%, transparent 70%); animation-delay: 0s; }}
+        .orb-2 {{ bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, #DBEAFE 0%, transparent 70%); animation-delay: -5s; }}
+        .orb-3 {{ top: 40%; left: 40%; width: 30vw; height: 30vw; background: radial-gradient(circle, #F1F5F9 0%, transparent 70%); animation-delay: -10s; }}
+        
+        @keyframes float {{
+            0% {{ transform: translate(0, 0) scale(1); }}
+            100% {{ transform: translate(50px, -50px) scale(1.1); }}
+        }}
 
-        /* TYPOGRAPHIE & COULEURS ACCENTS CHAUDES */
-        h1, h2, h3, h4 { color: #3A302B !important; letter-spacing: -0.02em; }
-        .accent-text { color: #E28743; } /* Orange doux/pêche */
-        .danger-text { color: #D65A31; } /* Corail/Rouille */
-        .safe-text { color: #6C9A7A; } /* Vert sauge doux */
-        .sub-text { color: #8B7E74 !important; }
+        /* --- Animation de Changement de Page (Se rejoue à chaque clic) --- */
+        [data-testid="block-container"] {{
+            animation: pageEnter_{anim_id} 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }}
+        @keyframes pageEnter_{anim_id} {{
+            0% {{ opacity: 0; transform: translateY(40px) scale(0.98); filter: blur(4px); }}
+            100% {{ opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }}
+        }}
 
-        /* ANIMATION DE TRANSITION DE PAGE (Page Fade) */
-        .page-animate {
-            animation: slideFadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            opacity: 0;
-            transform: translateY(15px);
-        }
-        @keyframes slideFadeIn {
-            0% { opacity: 0; transform: translateY(15px) scale(0.99); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
+        /* --- Sidebar Redesign --- */[data-testid="stSidebar"] {{
+            background: rgba(15, 23, 42, 0.98) !important;
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }}
+        div[role="radiogroup"] > label {{
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }}
+        div[role="radiogroup"] > label:hover {{ background: rgba(255,255,255,0.1); transform: translateX(5px); }}
+        [data-testid="stSidebar"] p, [data-testid="stSidebar"] div {{ color: #F1F5F9 !important; }}
 
-        /* GLASSMORPHISM CARDS CHALEUREUSES */[data-testid="stVerticalBlockBorderWrapper"] {
-            background: rgba(255, 255, 255, 0.7) !important;
+        /* --- Bouton Lancer Analyse --- */
+        .stButton > button {{
+            background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+            color: white !important;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            width: 100%;
+        }}
+        .stButton > button:hover {{
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+            background: linear-gradient(135deg, #1D4ED8 0%, #0891B2 100%);
+        }}
+
+        /* --- Glassmorphism Cards --- */
+        .glass-panel {{
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.9) !important;
-            border-radius: 24px !important;
-            box-shadow: 0 10px 30px rgba(139, 100, 70, 0.06);
-            transition: all 0.3s ease;
-        }[data-testid="stVerticalBlockBorderWrapper"]:hover {
-            box-shadow: 0 15px 40px rgba(139, 100, 70, 0.12);
-            transform: translateY(-2px);
-        }
+            border: 1px solid rgba(255, 255, 255, 1);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+            margin-bottom: 20px;
+        }}
+        
+        /* Alertes Pulsantes */
+        @keyframes pulseAlert {{
+            0% {{ box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }}
+            70% {{ box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }}
+            100% {{ box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }}
+        }}
+        .alert-critical {{ animation: pulseAlert 2s infinite; border: 2px solid #EF4444; }}
 
-        /* NAVIGATION TOP CUSTOM */
-        .nav-container div.stButton > button {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(226, 135, 67, 0.2);
-            color: #8B7E74 !important;
-            font-weight: 700;
-            border-radius: 16px;
-            padding: 12px 24px;
-            width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
-        .nav-container div.stButton > button:hover {
-            background: #FFF;
-            border: 1px solid #E28743;
-            color: #E28743 !important;
-            box-shadow: 0 6px 15px rgba(226, 135, 67, 0.15);
-        }
-        .nav-active div.stButton > button {
-            background: #E28743;
-            border: 1px solid #E28743;
-            color: #FFFFFF !important;
-            box-shadow: 0 8px 20px rgba(226, 135, 67, 0.25);
-        }
-
-        /* BOUTON ACTION PRINCIPAL */
-        .action-btn div.stButton > button {
-            background: linear-gradient(135deg, #E28743, #D65A31);
-            color: white !important;
-            font-weight: 800; font-size: 1.1rem; letter-spacing: 0.5px;
-            border-radius: 16px; border: none; padding: 15px; width: 100%;
-            box-shadow: 0 8px 25px rgba(214, 90, 49, 0.3);
-            transition: all 0.3s;
-        }
-        .action-btn div.stButton > button:hover {
-            box-shadow: 0 12px 30px rgba(214, 90, 49, 0.4);
-            transform: scale(1.02);
-        }
-
-        /* HEARTBEAT VISUALIZER (ECG) DOUX */
-        .ecg-container {
-            width: 100%; height: 70px; overflow: hidden; position: relative;
-            margin-bottom: -15px;
-        }
-        .ecg-line {
-            fill: none; stroke: #E28743; stroke-width: 2.5;
-            stroke-linecap: round; stroke-linejoin: round;
-            stroke-dasharray: 1500; stroke-dashoffset: 1500;
-            animation: drawECG 4s linear infinite;
-            filter: drop-shadow(0 3px 4px rgba(226, 135, 67, 0.3));
-        }
-        @keyframes drawECG { to { stroke-dashoffset: 0; } }
-
-        /* RESULTAT SPECTACULAIRE */
-        .massive-score-container {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 40px; text-align: center;
-        }
-        .score-circle {
-            width: 260px; height: 260px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; flex-direction: column;
-            background: #FFFFFF;
-            font-size: 4.5rem; font-weight: 900;
-            position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
-        }
-        /* Vitesses de pulsations cardiaques douces */
-        @keyframes pulseSoft {
-            0% { transform: scale(0.98); box-shadow: 0 0 0 0 var(--pulse-color); }
-            70% { transform: scale(1.02); box-shadow: 0 0 0 40px rgba(0,0,0,0); }
-            100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(0,0,0,0); }
-        }
-        .pulse-slow   { --pulse-color: rgba(108, 154, 122, 0.4); border: 4px solid #6C9A7A; color: #6C9A7A; animation: pulseSoft 2.5s infinite; }
-        .pulse-medium { --pulse-color: rgba(226, 135, 67, 0.4); border: 4px solid #E28743; color: #E28743; animation: pulseSoft 1.5s infinite; }
-        .pulse-fast   { --pulse-color: rgba(214, 90, 49, 0.5); border: 4px solid #D65A31; color: #D65A31; animation: pulseSoft 0.8s infinite; }
-
-        /* SCANNER LOADING (Écran d'accueil doux) */
-        .scanner-screen {
-            height: 85vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: #E28743; text-align: center;
-        }
-        .soft-pulse-loader {
-            width: 80px; height: 80px; border-radius: 50%;
-            background: #E28743; margin-bottom: 30px;
-            animation: pulseSoftLoader 2s infinite;
-        }
-        @keyframes pulseSoftLoader {
-            0% { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(226, 135, 67, 0.4); }
-            70% { transform: scale(1); opacity: 0.2; box-shadow: 0 0 0 40px rgba(226, 135, 67, 0); }
-            100% { transform: scale(0.8); opacity: 0.8; box-shadow: 0 0 0 0 rgba(226, 135, 67, 0); }
-        }
+        /* Headers customisés */
+        h1, h2, h3 {{ color: #0F172A !important; font-weight: 800 !important; letter-spacing: -0.5px; }}
+        .subtitle {{ color: #64748B; font-size: 1.1rem; font-weight: 500; margin-top: -10px; margin-bottom: 30px; }}
     </style>
+
+    <!-- Injection des Orbes de fond -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
 """, unsafe_allow_html=True)
 
 
 # ==========================================
-# 4. ÉCRAN DE CHARGEMENT "SÉRÉNITÉ"
+# 5. SIDEBAR : ENTRÉE DES DONNÉES
 # ==========================================
-if st.session_state.app_state == "booting":
-    st.markdown("""
-        <div class="scanner-screen">
-            <div class="soft-pulse-loader"></div>
-            <h1 style="font-size: 3rem; color: #3A302B;">Préparation de votre espace<span style="color: #E28743;">.</span></h1>
-            <p style="color: #8B7E74; font-size: 1.1rem; margin-top: 10px;">Initialisation des algorithmes de santé en toute sécurité...</p>
+st.sidebar.markdown("<p style='color: #94A3B8; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;'>Paramètres Cliniques</p>", unsafe_allow_html=True)
+
+with st.sidebar.expander("👤 Profil & Constantes", expanded=True):
+    age = st.slider("Âge", 18, 95, 60)
+    sex = st.radio("Sexe", ["Femme", "Homme"], horizontal=True)
+    time = st.slider("Suivi (jours)", 4, 285, 100)
+    ejection_fraction = st.slider("Fraction d'éjection (%)", 14, 80, 38)
+
+with st.sidebar.expander("🩸 Biologie Sanguine", expanded=False):
+    serum_creatinine = st.number_input("Créatinine (mg/dL)", 0.5, 10.0, 1.2, step=0.1)
+    serum_sodium = st.number_input("Sodium (mEq/L)", 110.0, 150.0, 137.0, step=1.0)
+    creatinine_phosphokinase = st.number_input("CPK (mcg/L)", 20, 8000, 250, step=10)
+    platelets = st.number_input("Plaquettes (k/mL)", 25000, 850000, 265000, step=5000)
+
+with st.sidebar.expander("🩺 Comorbidités", expanded=False):
+    anaemia = st.checkbox("Anémie")
+    diabetes = st.checkbox("Diabète")
+    high_blood_pressure = st.checkbox("Hypertension")
+    smoking = st.checkbox("Fumeur")
+
+st.sidebar.markdown("<br>", unsafe_allow_html=True)
+if st.sidebar.button("🚀 Lancer l'Analyse"):
+    patient = {
+        "age": age, "anaemia": int(anaemia), "creatinine_phosphokinase": creatinine_phosphokinase,
+        "diabetes": int(diabetes), "ejection_fraction": ejection_fraction,
+        "high_blood_pressure": int(high_blood_pressure), "platelets": platelets,
+        "serum_creatinine": serum_creatinine, "serum_sodium": serum_sodium,
+        "sex": 1 if sex == "Homme" else 0, "smoking": int(smoking), "time": time,
+    }
+    with st.spinner("Exécution des algorithmes en cours..."):
+        X_input = pd.DataFrame([patient])[FEATURE_NAMES]
+        st.session_state["proba"] = float(model.predict_proba(X_input)[0][1])
+
+proba = st.session_state["proba"]
+
+
+# ==========================================
+# 6. VUES PRINCIPALES (SPA)
+# ==========================================
+
+# --- PAGE 1 : TABLEAU DE BORD ---
+if page == "🏥 Tableau de Bord Patient":
+    st.markdown("<h1>Tableau de Bord Clinique</h1>", unsafe_allow_html=True)
+    st.markdown("<div class='subtitle'>Aperçu global de l'état du patient et évaluation immédiate du risque.</div>", unsafe_allow_html=True)
+
+    # Ligne 1 : Résumé Patient (Cartes KPI horizontales)
+    st.markdown(f"""
+        <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px;'>
+            <div class='glass-panel' style='text-align: center; padding: 15px;'>
+                <div style='color: #64748B; font-size: 13px; font-weight: 700; text-transform: uppercase;'>Âge Patient</div>
+                <div style='font-size: 28px; font-weight: 800; color: #0F172A;'>{age} <span style='font-size:16px; font-weight:500;'>ans</span></div>
+            </div>
+            <div class='glass-panel' style='text-align: center; padding: 15px;'>
+                <div style='color: #64748B; font-size: 13px; font-weight: 700; text-transform: uppercase;'>Sexe</div>
+                <div style='font-size: 28px; font-weight: 800; color: #0F172A;'>{sex}</div>
+            </div>
+            <div class='glass-panel' style='text-align: center; padding: 15px;'>
+                <div style='color: #64748B; font-size: 13px; font-weight: 700; text-transform: uppercase;'>Frac. Éjection</div>
+                <div style='font-size: 28px; font-weight: 800; color: #0284C7;'>{ejection_fraction}%</div>
+            </div>
+            <div class='glass-panel' style='text-align: center; padding: 15px;'>
+                <div style='color: #64748B; font-size: 13px; font-weight: 700; text-transform: uppercase;'>Durée de suivi</div>
+                <div style='font-size: 28px; font-weight: 800; color: #0F172A;'>{time} <span style='font-size:16px; font-weight:500;'>jrs</span></div>
+            </div>
         </div>
     """, unsafe_allow_html=True)
-    time.sleep(2)
-    st.session_state.app_state = "ready"
-    st.rerun()
 
-
-# ==========================================
-# 5. EN-TÊTE & NAVIGATION CUSTOM
-# ==========================================
-st.markdown("""
-    <div class="ecg-container">
-        <svg viewBox="0 0 1000 60" preserveAspectRatio="none">
-            <path class="ecg-line" d="M0,30 L200,30 L210,10 L220,50 L230,20 L240,40 L250,30 L450,30 L460,10 L480,55 L490,5 L500,30 L700,30 L710,20 L720,40 L730,30 L1000,30"></path>
-        </svg>
-    </div>
-""", unsafe_allow_html=True)
-
-st.markdown("<h1 style='text-align: center; font-weight: 900; margin-bottom: 30px;'>CardioCare <span class='accent-text'>Sérénité</span></h1>", unsafe_allow_html=True)
-
-nav1, nav2, nav3, nav4 = st.columns(4)
-def nav_class(page): return "nav-active nav-container" if st.session_state.current_page == page else "nav-container"
-
-with nav1:
-    st.markdown(f"<div class='{nav_class('input')}'>", unsafe_allow_html=True)
-    if st.button("1. Bilan Patient", use_container_width=True): 
-        st.session_state.current_page = "input"
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-with nav2:
-    st.markdown(f"<div class='{nav_class('dashboard')}'>", unsafe_allow_html=True)
-    if st.button("2. Vue d'Ensemble", use_container_width=True):
-        st.session_state.current_page = "dashboard"
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-with nav3:
-    st.markdown(f"<div class='{nav_class('shap')}'>", unsafe_allow_html=True)
-    if st.button("3. Explication Médicale", use_container_width=True):
-        st.session_state.current_page = "shap"
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-with nav4:
-    st.markdown(f"<div class='{nav_class('perf')}'>", unsafe_allow_html=True)
-    if st.button("4. Fiabilité IA", use_container_width=True):
-        st.session_state.current_page = "perf"
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-
-st.markdown("<div style='margin-bottom: 40px;'></div>", unsafe_allow_html=True)
-
-# Lancement de l'animation de transition pour tout le contenu en dessous
-st.markdown("<div class='page-animate'>", unsafe_allow_html=True)
-
-# ==========================================
-# 6. VUE 1 : INPUT EXPERIENCE (Douceur)
-# ==========================================
-if st.session_state.current_page == "input":
-    st.markdown("### 📋 Formulaire de Santé")
-    st.markdown("<p class='sub-text' style='margin-bottom: 30px;'>Renseignez les informations avec soin. Ces données sont traitées de manière sécurisée.</p>", unsafe_allow_html=True)
-
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        with st.container(border=True):
-            st.markdown("<h4 class='accent-text'>👤 Profil Personnel</h4>", unsafe_allow_html=True)
-            age = st.slider("Âge (années)", 18, 95, 60)
-            sex = st.radio("Sexe", ["Femme", "Homme"], horizontal=True)
-            time_fup = st.slider("Période de suivi (jours)", 4, 285, 100)
-
-        with st.container(border=True):
-            st.markdown("<h4 class='accent-text'>🩺 Signes Cardiaques</h4>", unsafe_allow_html=True)
-            ejection_fraction = st.slider("Fraction d'éjection (%)", 14, 80, 38)
-            high_blood_pressure = st.toggle("Antécédents d'Hypertension")
-
-    with col2:
-        with st.container(border=True):
-            st.markdown("<h4 class='accent-text'>🩸 Prises de Sang</h4>", unsafe_allow_html=True)
-            serum_creatinine = st.number_input("Créatinine sérique (mg/dL)", 0.5, 10.0, 1.2, step=0.1)
-            serum_sodium = st.number_input("Sodium sérique (mEq/L)", 110.0, 150.0, 137.0, step=1.0)
-            creatinine_phosphokinase = st.number_input("Enzyme CPK (mcg/L)", 20, 8000, 250, step=10)
-            platelets = st.number_input("Plaquettes (k/mL)", 25000, 850000, 265000, step=5000)
-
-        with st.container(border=True):
-            st.markdown("<h4 class='accent-text'>⚠️ Antécédents</h4>", unsafe_allow_html=True)
-            c_a, c_d, c_s = st.columns(3)
-            with c_a: anaemia = st.toggle("Anémie")
-            with c_d: diabetes = st.toggle("Diabète")
-            with c_s: smoking = st.toggle("Fumeur")
-
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("<div class='action-btn'>", unsafe_allow_html=True)
-    if st.button("LANCER L'ÉVALUATION SÉCURISÉE", use_container_width=True):
-        patient = {
-            "age": age, "anaemia": int(anaemia), "creatinine_phosphokinase": creatinine_phosphokinase,
-            "diabetes": int(diabetes), "ejection_fraction": ejection_fraction,
-            "high_blood_pressure": int(high_blood_pressure), "platelets": platelets,
-            "serum_creatinine": serum_creatinine, "serum_sodium": serum_sodium,
-            "sex": 1 if sex == "Homme" else 0, "smoking": int(smoking), "time": time_fup,
-        }
-        st.session_state.patient_data = patient
-        X_input = pd.DataFrame([patient])[FEATURE_NAMES]
-        st.session_state.proba = float(model.predict_proba(X_input)[0][1])
-        st.session_state.current_page = "dashboard"
-        st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-
-
-# ==========================================
-# 7. VUE 2 : RÉSULTAT (Doux & Rassurant)
-# ==========================================
-elif st.session_state.current_page == "dashboard":
-    if st.session_state.proba is None:
-        st.warning("Veuillez d'abord remplir le Bilan Patient.")
+    if proba is None:
+        st.info("👈 Renseignez le profil complet dans le menu latéral et cliquez sur **Lancer l'Analyse**.")
     else:
-        proba = st.session_state.proba
+        col1, col2 = st.columns([1, 1.2])
         
-        if proba >= 0.65:
-            pulse_class = "pulse-fast"
-            status_text = "VIGILANCE REQUISE"
-            desc_text = "Nos algorithmes détectent des signes d'alerte nécessitant un avis médical rapide."
-            color_class = "danger-text"
-        elif proba >= 0.40:
-            pulse_class = "pulse-medium"
-            status_text = "ATTENTION MODÉRÉE"
-            desc_text = "Certains biomarqueurs sont instables. Une surveillance est recommandée."
-            color_class = "accent-text"
-        else:
-            pulse_class = "pulse-slow"
-            status_text = "ÉTAT RASSURANT"
-            desc_text = "Vos constantes actuelles sont stables et ne montrent pas de risque immédiat."
-            color_class = "safe-text"
+        # Jauge Plotly
+        with col1:
+            st.markdown("<div class='glass-panel' style='height: 100%;'>", unsafe_allow_html=True)
+            color = "#10B981" if proba < 0.4 else "#F59E0B" if proba < 0.65 else "#EF4444"
+            fig = go.Figure(go.Indicator(
+                mode="gauge+number", value=round(proba * 100, 1),
+                number={"suffix": "%", "font": {"size": 50, "color": color, "family": "Plus Jakarta Sans"}},
+                gauge={
+                    "axis": {"range": [0, 100], "tickwidth": 0, "tickcolor": "transparent"},
+                    "bar": {"color": color, "thickness": 0.25},
+                    "bgcolor": "rgba(0,0,0,0.05)", "borderwidth": 0,
+                    "steps":[
+                        {"range": [0, 40], "color": "rgba(16, 185, 129, 0.1)"},
+                        {"range":[40, 65], "color": "rgba(245, 158, 11, 0.1)"},
+                        {"range": [65, 100], "color": "rgba(239, 68, 68, 0.1)"},
+                    ],
+                }
+            ))
+            fig.update_layout(height=300, margin=dict(t=20, b=10, l=10, r=10), paper_bgcolor="rgba(0,0,0,0)", font={'family': "Plus Jakarta Sans"})
+            st.plotly_chart(fig, use_container_width=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
-        c_dash1, c_dash2 = st.columns([1, 1])
-
-        with c_dash1:
-            st.markdown("<div class='massive-score-container'>", unsafe_allow_html=True)
-            st.markdown(f"<p class='sub-text' style='font-weight:bold; letter-spacing:1.5px; margin-bottom:20px;'>NIVEAU D'ATTENTION</p>", unsafe_allow_html=True)
+        # Boîte d'alerte dynamique
+        with col2:
+            risk_label = "CRITIQUE" if proba >= 0.65 else "MODÉRÉ" if proba >= 0.40 else "FAIBLE"
+            alert_class = "alert-critical" if proba >= 0.65 else ""
+            desc = (
+                "Intervention médicale urgente requise. Fort risque de défaillance à court terme." if proba >= 0.65 else
+                "Surveillance clinique rapprochée conseillée. Paramètres instables." if proba >= 0.40 else
+                "Paramètres vitaux dans les normes. Pas de risque immédiat détecté."
+            )
+            bg_grad = "linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.02))" if proba >= 0.65 else "linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.02))" if proba >= 0.40 else "linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.02))"
+            
             st.markdown(f"""
-                <div class='score-circle {pulse_class}'>
-                    {proba*100:.1f}<span style='font-size:1.5rem;'>%</span>
+                <div class='glass-panel {alert_class}' style='background: {bg_grad}; height: 100%; display: flex; flex-direction: column; justify-content: center;'>
+                    <div style='text-transform: uppercase; font-size: 14px; font-weight: 800; color: {color}; letter-spacing: 2px;'>Alerte Système IA</div>
+                    <h2 style='font-size: 46px; font-weight: 800; color: #0F172A; margin: 5px 0 15px 0;'>RISQUE {risk_label}</h2>
+                    <p style='font-size: 18px; color: #334155; line-height: 1.5; font-weight: 500;'>{desc}</p>
+                    <div style='margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between;'>
+                        <span style='color: #64748B; font-weight: 600;'>Fiabilité du modèle : <span style='color:#0F172A; font-weight:800;'>86.7%</span></span>
+                    </div>
                 </div>
             """, unsafe_allow_html=True)
-            st.markdown(f"<h2 style='margin-top:30px;' class='{color_class}'>{status_text}</h2>", unsafe_allow_html=True)
-            st.markdown(f"<p class='sub-text' style='text-align:center;'>{desc_text}</p>", unsafe_allow_html=True)
+
+# --- PAGE 2 : EXPLICABILITÉ (SHAP) ---
+elif page == "🧠 Explicabilité IA (SHAP)":
+    st.markdown("<h1>Explicabilité et Transparence</h1>", unsafe_allow_html=True)
+    st.markdown("<div class='subtitle'>Comprenez le raisonnement de l'Intelligence Artificielle de A à Z.</div>", unsafe_allow_html=True)
+
+    if proba is None:
+        st.warning("⚠️ Veuillez lancer une analyse depuis le menu latéral pour débloquer l'explicabilité de ce profil.")
+    else:
+        st.markdown("<div class='glass-panel'>", unsafe_allow_html=True)
+        st.markdown("<h3>🧬 Impact Spécifique au Patient (Waterfall)</h3>", unsafe_allow_html=True)
+        col_w1, col_w2 = st.columns([2, 1])
+        
+        with col_w1:
+            # Récupération des données du Sidebar pour SHAP
+            patient_data = {
+                "age": age, "anaemia": int(anaemia), "creatinine_phosphokinase": creatinine_phosphokinase,
+                "diabetes": int(diabetes), "ejection_fraction": ejection_fraction,
+                "high_blood_pressure": int(high_blood_pressure), "platelets": platelets,
+                "serum_creatinine": serum_creatinine, "serum_sodium": serum_sodium,
+                "sex": 1 if sex == "Homme" else 0, "smoking": int(smoking), "time": time,
+            }
+            X_input = pd.DataFrame([patient_data])[FEATURE_NAMES]
+            waterfall_path = "/tmp/patient_waterfall.png"
+            plot_waterfall_single(explainer, X_input, FEATURE_NAMES, save_path=waterfall_path)
+            st.image(waterfall_path, use_column_width=True)
+            
+        with col_w2:
+            patient_shap = compute_shap_values(explainer, X_input)
+            top_features = get_top_features(patient_shap, FEATURE_NAMES, top_n=5)
+            st.markdown("<div style='background: rgba(255,255,255,0.5); padding: 20px; border-radius: 15px;'>", unsafe_allow_html=True)
+            st.markdown("<h4 style='margin-top:0;'>Top 5 Facteurs Déterminants</h4>", unsafe_allow_html=True)
+            for feat, score in top_features:
+                if score > 0:
+                    st.markdown(f"<div style='border-left: 4px solid #EF4444; padding-left: 10px; margin-bottom: 12px;'><b>{feat}</b><br><span style='color:#EF4444; font-size:14px; font-weight:600;'>↗ Aggrave le risque (+{score:.2f})</span></div>", unsafe_allow_html=True)
+                else:
+                    st.markdown(f"<div style='border-left: 4px solid #10B981; padding-left: 10px; margin-bottom: 12px;'><b>{feat}</b><br><span style='color:#10B981; font-size:14px; font-weight:600;'>↘ Réduit le risque ({score:.2f})</span></div>", unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-        with c_dash2:
-            st.markdown("<h3 class='accent-text'>Résumé de l'analyse</h3>", unsafe_allow_html=True)
-            p = st.session_state.patient_data
-            with st.container(border=True):
-                s1, s2 = st.columns(2)
-                s1.metric("Fraction Éjection", f"{p['ejection_fraction']}%", delta="Normal" if p['ejection_fraction']>30 else "À vérifier", delta_color="normal" if p['ejection_fraction']>30 else "inverse")
-                s2.metric("Créatinine", f"{p['serum_creatinine']} mg/dL", delta="Anormal" if p['serum_creatinine']>1.5 else "OK", delta_color="inverse")
-                s1.metric("Sodium", f"{p['serum_sodium']} mEq/L")
-                s2.metric("Enzyme CPK", f"{p['creatinine_phosphokinase']} mcg/L")
-            
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("<div class='action-btn'>", unsafe_allow_html=True)
-            if st.button("COMPRENDRE CES RÉSULTATS", use_container_width=True):
-                st.session_state.current_page = "shap"
-                st.rerun()
-            st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("<div class='glass-panel'>", unsafe_allow_html=True)
+        st.markdown("<h3>🌍 Importance Globale des Biomarqueurs (Cohorte)</h3>", unsafe_allow_html=True)
+        shap_values = compute_shap_values(explainer, X_test)
+        mean_abs = np.abs(shap_values).mean(axis=0)
+        sorted_idx = np.argsort(mean_abs)
+        
+        fig, ax = plt.subplots(figsize=(10, 4.5))
+        ax.barh([FEATURE_NAMES[i] for i in sorted_idx], mean_abs[sorted_idx], color="#0284C7", alpha=0.9, height=0.6)
+        ax.set_xlabel("Poids moyen dans la décision de l'IA (|SHAP|)", fontsize=11, fontweight="bold", color="#334155")
+        ax.tick_params(colors="#0F172A", labelsize=10)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_color("transparent")
+        ax.spines["bottom"].set_color("#CBD5E1")
+        fig.patch.set_alpha(0)
+        ax.patch.set_alpha(0)
+        plt.tight_layout()
+        st.pyplot(fig, transparent=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
+# --- PAGE 3 : PERFORMANCES ---
+elif page == "⚙️ Santé du Modèle":
+    st.markdown("<h1>Évaluation Technique du Moteur LightGBM</h1>", unsafe_allow_html=True)
+    st.markdown("<div class='subtitle'>Analyse de la robustesse et des métriques statistiques de l'algorithme.</div>", unsafe_allow_html=True)
 
-# ==========================================
-# 8. VUE 3 : EXPLICABILITÉ (SHAP Corrigé)
-# ==========================================
-elif st.session_state.current_page == "shap":
-    st.markdown("### 🌿 Transparence des Résultats")
-    st.markdown("<p class='sub-text'>Découvrez de manière transparente comment l'IA a interprété vos données.</p>", unsafe_allow_html=True)
-
-    tab1, tab2 = st.tabs(["Analyse de votre profil", "Critères généraux de l'IA"])
-
-    with tab1:
-        if st.session_state.patient_data is None:
-            st.warning("Calibrez un patient d'abord.")
-        else:
-            X_input = pd.DataFrame([st.session_state.patient_data])[FEATURE_NAMES]
-            
-            col_shap1, col_shap2 = st.columns([1, 2])
-            with col_shap1:
-                with st.container(border=True):
-                    st.markdown("<h4 class='accent-text'>Les points clés</h4>", unsafe_allow_html=True)
-                    patient_shap = compute_shap_values(explainer, X_input)
-                    top_features = get_top_features(patient_shap, FEATURE_NAMES, top_n=5)
-                    for feat, score in top_features:
-                        if score > 0:
-                            st.markdown(f"<p><span class='danger-text' style='font-weight:bold;'>↑ {feat}</span><br><span class='sub-text' style='font-size:0.85rem;'>Demande de l'attention</span></p>", unsafe_allow_html=True)
-                        else:
-                            st.markdown(f"<p><span class='safe-text' style='font-weight:bold;'>↓ {feat}</span><br><span class='sub-text' style='font-size:0.85rem;'>Facteur rassurant</span></p>", unsafe_allow_html=True)
-
-            with col_shap2:
-                with st.container(border=True):
-                    waterfall_path = "/tmp/patient_waterfall.png"
-                    plot_waterfall_single(explainer, X_input, FEATURE_NAMES, save_path=waterfall_path)
-                    # CORRECTION DU WARNING use_container_width
-                    st.image(waterfall_path, use_container_width=True)
-
-    with tab2:
-        with st.container(border=True):
-            shap_values = compute_shap_values(explainer, X_test)
-            mean_abs = np.abs(shap_values).mean(axis=0)
-            sorted_idx = np.argsort(mean_abs)
-            
-            fig, ax = plt.subplots(figsize=(10, 5))
-            fig.patch.set_alpha(0) 
-            ax.patch.set_alpha(0)
-            
-            # CORRECTION DE L'ERREUR MATPLOTLIB : On utilise un code hex et pas de edgecolor
-            ax.barh(
-                [FEATURE_NAMES[i] for i in sorted_idx],
-                mean_abs[sorted_idx],
-                color="#E28743", edgecolor="none"
-            )
-            ax.set_xlabel("Impact Moyen sur la Décision de l'IA", color="#4A403B", weight="bold")
-            ax.tick_params(colors="#4A403B")
-            ax.spines["top"].set_visible(False)
-            ax.spines["right"].set_visible(False)
-            ax.spines["bottom"].set_color("#8B7E74")
-            ax.spines["left"].set_color("#8B7E74")
-            plt.tight_layout()
-            st.pyplot(fig, transparent=True)
-
-
-# ==========================================
-# 9. VUE 4 : PERFORMANCES DU MODÈLE
-# ==========================================
-elif st.session_state.current_page == "perf":
-    st.markdown("### 🛡️ Fiabilité du Diagnostic")
-    
     y_pred = model.predict(X_test)
     y_proba = model.predict_proba(X_test)[:, 1]
 
-    col_m1, col_m2, col_m3, col_m4 = st.columns(4)
-    with col_m1:
-        with st.container(border=True):
-            st.markdown("<p class='sub-text' style='font-size:12px; font-weight:bold; letter-spacing:1px;'>SENSIBILITÉ</p>", unsafe_allow_html=True)
-            st.markdown(f"<h2 class='accent-text' style='margin:0;'>{recall_score(y_test, y_pred):.3f}</h2>", unsafe_allow_html=True)
-    with col_m2:
-        with st.container(border=True):
-            st.markdown("<p class='sub-text' style='font-size:12px; font-weight:bold; letter-spacing:1px;'>PRÉCISION</p>", unsafe_allow_html=True)
-            st.markdown(f"<h2 class='accent-text' style='margin:0;'>{precision_score(y_test, y_pred):.3f}</h2>", unsafe_allow_html=True)
-    with col_m3:
-        with st.container(border=True):
-            st.markdown("<p class='sub-text' style='font-size:12px; font-weight:bold; letter-spacing:1px;'>ROC-AUC</p>", unsafe_allow_html=True)
-            st.markdown(f"<h2 class='safe-text' style='margin:0;'>{roc_auc_score(y_test, y_proba):.3f}</h2>", unsafe_allow_html=True)
-    with col_m4:
-        with st.container(border=True):
-            st.markdown("<p class='sub-text' style='font-size:12px; font-weight:bold; letter-spacing:1px;'>EXACTITUDE GLOBALE</p>", unsafe_allow_html=True)
-            st.markdown(f"<h2 style='color:#3A302B; margin:0;'>{accuracy_score(y_test, y_pred)*100:.1f}%</h2>", unsafe_allow_html=True)
+    # Cartes de métriques
+    st.markdown(f"""
+        <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;'>
+            <div class='glass-panel' style='text-align:center; padding: 20px;'>
+                <div style='color:#EF4444; font-size:36px; font-weight:800;'>{recall_score(y_test, y_pred):.3f}</div>
+                <div style='color:#64748B; font-weight:700; font-size:14px;'>SENSIBILITÉ (RECALL)</div>
+            </div>
+            <div class='glass-panel' style='text-align:center; padding: 20px;'>
+                <div style='color:#F59E0B; font-size:36px; font-weight:800;'>{precision_score(y_test, y_pred):.3f}</div>
+                <div style='color:#64748B; font-weight:700; font-size:14px;'>PRÉCISION</div>
+            </div>
+            <div class='glass-panel' style='text-align:center; padding: 20px;'>
+                <div style='color:#10B981; font-size:36px; font-weight:800;'>{roc_auc_score(y_test, y_proba):.3f}</div>
+                <div style='color:#64748B; font-weight:700; font-size:14px;'>ROC-AUC</div>
+            </div>
+            <div class='glass-panel' style='text-align:center; padding: 20px;'>
+                <div style='color:#8B5CF6; font-size:36px; font-weight:800;'>{f1_score(y_test, y_pred):.3f}</div>
+                <div style='color:#64748B; font-weight:700; font-size:14px;'>SCORE F1</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    c_conf1, c_conf2 = st.columns([1, 2])
-    
-    with c_conf2:
-        with st.container(border=True):
-            st.markdown("<h4 class='accent-text'>Matrice de Validation</h4>", unsafe_allow_html=True)
-            cm = confusion_matrix(y_test, y_pred)
-            fig_cm, ax = plt.subplots(figsize=(6, 4))
-            fig_cm.patch.set_alpha(0)
-            ax.patch.set_alpha(0)
-            
-            # Palette douce pour la matrice de confusion
-            cmap_custom = sns.light_palette("#E28743", as_cmap=True)
-            sns.heatmap(cm, annot=True, fmt="d", cmap=cmap_custom,
-                        cbar=False, annot_kws={"size": 18, "weight": "bold", "color": "#3A302B"},
-                        xticklabels=["Survie Prédite", "Décès Prédit"],
-                        yticklabels=["Survie Réelle", "Décès Réel"], ax=ax)
-            ax.set_yticklabels(ax.get_yticklabels(), rotation=0, color="#4A403B", weight="bold")
-            ax.set_xticklabels(ax.get_xticklabels(), color="#4A403B", weight="bold")
-            st.pyplot(fig_cm, transparent=True)
-
-# Fin de la div d'animation de page
-st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("<div class='glass-panel'>", unsafe_allow_html=True)
+    st.markdown("<h3>📊 Matrice de Confusion</h3>", unsafe_allow_html=True)
+    col_cm1, col_cm2, col_cm3 = st.columns([1, 2, 1])
+    with col_cm2:
+        cm = confusion_matrix(y_test, y_pred)
+        fig_cm, ax = plt.subplots(figsize=(6, 4.5))
+        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False, annot_kws={"size": 22, "weight": "bold"},
+                    xticklabels=["Survie Prédite", "Décès Prédit"], yticklabels=["Survie Réelle", "Décès Réel"], ax=ax)
+        ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=11, weight="bold", color="#334155")
+        ax.set_xticklabels(ax.get_xticklabels(), fontsize=11, weight="bold", color="#334155")
+        fig_cm.patch.set_alpha(0)
+        ax.patch.set_alpha(0)
+        st.pyplot(fig_cm, transparent=True)
+    st.markdown("</div>", unsafe_allow_html=True)
