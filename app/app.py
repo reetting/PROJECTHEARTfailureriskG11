@@ -71,7 +71,72 @@ def get_test_data():
     df = optimize_memory(df)
     X, y = df[FEATURE_NAMES], df["DEATH_EVENT"]
     return train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
-
+def generate_pdf_report(patient: dict, proba: float) -> str:
+risk_label = (
+    "RISQUE CRITIQUE" if proba >= 0.65 else
+    "RISQUE MODERE"   if proba >= 0.40 else
+    "RISQUE FAIBLE"
+    )
+    pdf = FPDF()
+    pdf.add_page()
+    # En-tete
+    pdf.set_font("Helvetica", "B", 24)
+    pdf.set_text_color(41, 128, 185)
+    pdf.cell(0, 15, "CardioCare AI", ln=True, align="C")
+    pdf.set_font("Helvetica", "", 12)
+    pdf.set_text_color(127, 140, 141)
+    pdf.cell(0, 8, "Rapport de Diagnostic", ln=True, align="C")
+    pdf.ln(10)
+    # Resultat
+    pdf.set_font("Helvetica", "B", 16)
+    pdf.set_text_color(44, 62, 80)
+    pdf.cell(0, 10, f"Diagnostic : {risk_label}", ln=True)
+    pdf.set_font("Helvetica", "", 14)
+    pdf.cell(0, 10, f"Probabilite de deces : {proba*100:.1f}%", ln=True)
+    pdf.ln(5)
+    # Ligne separatrice
+    pdf.set_draw_color(41, 128, 185)
+    pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+    pdf.ln(5)
+    # Profil patient
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.set_text_color(41, 128, 185)
+    pdf.cell(0, 10, "Profil Clinique", ln=True)
+    pdf.set_font("Helvetica", "", 12)
+    pdf.set_text_color(44, 62, 80)
+    labels = {
+        "age":                      "Age",
+        "sex":                      "Sexe",
+        "ejection_fraction":        "Fraction d ejection (%)",
+        "serum_creatinine":         "Creatinine serique (mg/dL)",
+        "serum_sodium":             "Sodium serique (mEq/L)",
+        "creatinine_phosphokinase": "Enzyme CPK (mcg/L)",
+        "platelets":                "Plaquettes (k/mL)",
+        "anaemia":                  "Anemie",
+        "diabetes":                 "Diabete",
+        "high_blood_pressure":      "Hypertension",
+        "smoking":                  "Fumeur",
+        "time":                     "Periode de suivi (jours)",
+    }
+    for key, label in labels.items():
+        value = patient[key]
+        if key == "sex":
+            value = "Homme" if value == 1 else "Femme"
+        elif key in ["anaemia", "diabetes", "high_blood_pressure", "smoking"]:
+            value = "Oui" if value == 1 else "Non"
+        pdf.cell(100, 8, label, border="B")
+        pdf.cell(0, 8, str(value), border="B", ln=True)
+    pdf.ln(5)
+    # Avertissement
+    pdf.set_font("Helvetica", "I", 10)
+    pdf.set_text_color(127, 140, 141)
+    pdf.multi_cell(0, 6,
+        "Avertissement : Ce rapport est genere a des fins educatives uniquement. "
+        "Il ne se substitue pas a un diagnostic medical professionnel."
+    )
+    path = "/tmp/cardiocare_rapport.pdf"
+    pdf.output(path)
+    return path
 model = get_model()
 X_train, X_test, y_train, y_test = get_test_data()
 explainer = get_shap_explainer(model, X_train)
