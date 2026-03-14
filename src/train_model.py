@@ -1,4 +1,5 @@
 import sys
+from sklearn.model_selection import GridSearchCV #teste toutes les combinaisons possibles pour garder la meilleure performance 
 import os
 import pickle
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -11,6 +12,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold, cross_val_score
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from sklearn.preprocessing import StandardScaler
+
 MODELS = {
     "RandomForest": RandomForestClassifier(
         n_estimators=100, class_weight="balanced", random_state=42
@@ -120,3 +122,81 @@ def ensemble_averaging(trained_models, X_test, y_test):
         print(f"{name:<12} {s_lgbm:>10.4f} {s_ens:>10.4f} {signe}{diff:>7.4f}")
 
     return proba_ensemble, y_pred_ensemble
+
+def optimize_lightgbm(X_train, y_train):
+
+    """
+    Cette fonction applique GridSearchCV pour trouver
+    les meilleurs hyperparamètres du modèle LightGBM.
+
+    Objectif :
+    Maximiser le Recall, car dans un contexte médical
+    il est important de détecter le maximum de patients à risque.
+    """
+
+
+    param_grid = {
+        'n_estimators': [100, 200, 300],
+        'max_depth': [3, 5, 7, -1],
+        'learning_rate': [0.01, 0.05, 0.1],
+        'num_leaves': [31, 50, 70],
+        'min_child_samples': [10, 20, 30]
+    }
+
+    # Création du modèle LightGBM de base
+    
+    model = LGBMClassifier(
+
+        class_weight='balanced',
+
+        random_state=42,
+
+        # supprimer les logs inutiles
+        verbose=-1
+    )
+
+    # Configuration de GridSearchCV
+ 
+    grid_search = GridSearchCV(
+
+        estimator=model,
+
+        # grille de paramètres définie plus haut
+        param_grid=param_grid,
+
+        # métrique utilisée pour choisir le meilleur modèle
+        scoring='recall',
+
+        # validation croisée 5-fold
+        cv=5,
+
+        # utiliser tous les CPU disponibles
+        n_jobs=-1,
+
+        # afficher la progression dans le terminal
+        verbose=1
+    )
+
+    # Entrainement du GridSearch
+
+
+    # GridSearch va entraîner plusieurs modèles
+    # avec différentes combinaisons d'hyperparamètres
+    grid_search.fit(X_train, y_train)
+
+    # -----------------------------------------------------
+    # Affichage des meilleurs paramètres trouvés
+    # -----------------------------------------------------
+
+    print("\nMeilleurs hyperparamètres trouvés :")
+
+    for param, value in grid_search.best_params_.items():
+        print(f"{param} : {value}")
+
+    print(f"\nMeilleur Recall (Cross Validation) : {grid_search.best_score_:.4f}")
+
+    # -----------------------------------------------------
+    # Retourner le meilleur modèle trouvé
+    # -----------------------------------------------------
+
+    return grid_search.best_estimator_
