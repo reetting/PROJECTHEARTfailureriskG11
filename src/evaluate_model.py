@@ -1,6 +1,9 @@
+import sys 
 import os
 import pickle
-from src.train_model import MODELS,train_all_models
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.train_model import MODELS,train_all_models,compare_base_vs_balanced
 from src.data_processing import load_data, handle_outliers, optimize_memory
 from sklearn.metrics import roc_auc_score, f1_score
 from sklearn.model_selection import train_test_split
@@ -63,6 +66,6 @@ if __name__ == "__main__":
 
     # Affichage des métriques — à toi de choisir le meilleur !
     evaluate_all_models(trained_models, X_test, y_test)
-
+    compare_base_vs_balanced(X_train, X_test, y_train, y_test)
     print("\nEntraînement terminé ✓")
 save_model(trained_models["LightGBM"])
