@@ -24,6 +24,7 @@ def optimize_memory(df: pd.DataFrame) -> pd.DataFrame:
 def load_data(file_path: str) -> pd.DataFrame:
     """Charge le dataset médical et applique l'optimisation."""
     df = pd.read_csv(file_path)
+    df.columns = df.columns.str.lower()
     return optimize_memory(df)
 def handle_outliers(df):
     Q1 = df.quantile(0.25)
