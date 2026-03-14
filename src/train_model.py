@@ -10,6 +10,7 @@ from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
 from sklearn.metrics import roc_auc_score, f1_score
 from src.data_processing import load_data, handle_outliers, optimize_memory,prepare_data
+from sklearn.model_selection import GridSearchCV
 
 
 MODELS = {
