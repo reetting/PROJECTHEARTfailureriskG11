@@ -370,7 +370,7 @@ st.markdown("""
     </h1>
 """, unsafe_allow_html=True)
 
-nav1, nav2, nav3, nav4 = st.columns(5)
+nav1, nav2, nav3, nav4, nav5 = st.columns(5)
 def nav_class(page): return "nav-active nav-container" if st.session_state.current_page == page else "nav-container"
 
 with nav1:
