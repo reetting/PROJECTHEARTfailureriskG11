@@ -20,11 +20,11 @@ CardioCare AI est une application web qui prédit le risque de décès par insuf
 
 | Membre | Rôle |
 |--------|------|
-| Personne #1 | EDA & Preprocessing |
-| Evan | Entraînement des modèles |
-| Personne #3 | Évaluation & SHAP |
-| Personne #4 | Interface Streamlit |
-| Personne #5 | DevOps, Tests & Documentation |
+| Laouine Youssef | EDA & Preprocessing |
+| maleu ivan emmanuel rabé(ps : reetting) | Entraînement des modèles |
+| mostafa amine zakanie | Évaluation & SHAP |
+| Aboufouzia mohamed yahya  | Interface Streamlit |
+| Latifi Chady | DevOps, Tests & Documentation |
 
 ---
 
@@ -102,8 +102,8 @@ HEARTTfailureriskG5/
 │   └── app.py              # Interface Streamlit
 ├── tests/                  # Tests unitaires
 ├── requirements.txt
-├── setup.py
-├── Dockerfile
+├── 
+├── 
 └── README.md
 ```
 
