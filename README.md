@@ -151,7 +151,8 @@ pytest tests/
 
 L'application est déployée sur Streamlit Cloud :  
 👉 **[hearttfailureriskg5.streamlit.app](https://hearttfailureriskg5.streamlit.app)**
-
+ si vous rencontrez une erreure essayer ce lien : https://hearttfailureriskg5-jzjtrfnukh7yce7lsvxsyk.streamlit.app/
+ si il y a toujours un probleme écrivez a @reetting pour avoir l'accés direct .
 ---
 
 ##  Explicabilité — SHAP
