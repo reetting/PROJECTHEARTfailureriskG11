@@ -179,4 +179,4 @@ Les variables les plus importantes identifiées :
 ##  Licence
 
 — École Centrale Casablanca, Promotion 2028
-
+## you will found in notebooks how we distributed our work ( name : jira ) 
