@@ -1,0 +1,2088 @@
+<html
+        xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<title>Jira</title>
+<style type="text/css">
+table {
+    mso-displayed-decimal-separator:"\,";
+    mso-displayed-thousand-separator:" ";
+}
+body
+{
+    margin: 0px;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    color:black;
+}
+
+</style>
+<META HTTP-EQUIV="Content-Type" Content="application/vnd.ms-excel; charset=UTF-8">
+<!-- JRA-7598 - ensure fields (e.g. description) occupy only one cell - even fields containing newlines. -->
+<!--
+Vertical align all cells to the top, in order to align all issue rows of issuetable to the top,
+since Excel does not use or save the css files it is hardcoded here.
+-->
+<style>
+@page
+{
+mso-page-orientation:landscape;
+margin:.25in .25in .5in .25in;
+mso-header-margin:.5in;
+mso-footer-margin:.25in;
+mso-footer-data:"&R&P of &N";
+mso-horizontal-page-align:center;
+mso-vertical-page-align:center;
+}
+
+td.issuekey,
+td.issuetype,
+td.status {
+    mso-style-parent: "";
+    mso-number-format: \@;
+    text-align: left;
+}
+br
+{
+    mso-data-placement:same-cell;
+}
+
+td
+{
+    vertical-align: top;
+}
+</style>
+
+<!--[if gte mso 9]><xml>
+<x:ExcelWorkbook>
+<x:ExcelWorksheets>
+<x:ExcelWorksheet>
+<x:Name>general_report</x:Name>
+<x:WorksheetOptions>
+<x:Print>
+<x:ValidPrinterInfo/>
+</x:Print>
+</x:WorksheetOptions>
+</x:ExcelWorksheet>
+</x:ExcelWorksheets>
+</x:ExcelWorkbook>
+</xml><![endif]-->
+</head>
+<body>
+
+<table border="1">
+    <tr bgcolor="#205081" height="30">
+        <td colspan="42">
+            <img src="https://centrale-casablanca-team-ecj2g438.atlassian.net/images/icon-jira-family-logo.png" width="57" height="30" border="0" alt="Jira">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="42">
+            <a href="https://centrale-casablanca-team-ecj2g438.atlassian.net/issues/?jql=project+%3D+GDP+ORDER+BY+cf%5B10019%5D+ASC">Jira</a>
+        </td>
+    </tr>
+    <tr>
+                <td colspan="42">
+            Affichage de <strong>27</strong> ticket(s) à <strong>15/mars/26 12:14 AM</strong>.
+        </td>
+    </tr>
+</table>
+
+
+
+
+                                        <table id="issuetable" class="aui " border="1" cellpadding="3" cellspacing="1" width="100%">
+                        <thead>
+        <tr class="rowHeader">
+            
+                                                            <th class="colHeaderLink headerrow-statuscategorychangedate" data-id="statuscategorychangedate">
+                                                        Catégorie d&#39;état modifiée
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-issuetype" data-id="issuetype">
+                                                        Type de ticket
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-issuekey" data-id="issuekey">
+                                                        Clé
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-customfield_10091" data-id="customfield_10091">
+                                                        Catégorie
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-customfield_10092" data-id="customfield_10092">
+                                                        Budget
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-timespent" data-id="timespent">
+                                                        Temps consacré
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-timeoriginalestimate" data-id="timeoriginalestimate">
+                                                        Estimation originale
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-project" data-id="project">
+                                                        Projet
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-description" data-id="description">
+                                                        Description
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-statusCategory" data-id="statusCategory">
+                                                        Catégorie d&#39;état
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-aggregatetimespent" data-id="aggregatetimespent">
+                                                        Σ Temps consacré
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-parent" data-id="parent">
+                                                        Parent
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-resolution" data-id="resolution">
+                                                        Résolution
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-customfield_10015" data-id="customfield_10015">
+                                                        Start date
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-security" data-id="security">
+                                                        Niveau de sécurité
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-aggregatetimeestimate" data-id="aggregatetimeestimate">
+                                                        Σ Estimation restante
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-resolutiondate" data-id="resolutiondate">
+                                                        Résolu
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-workratio" data-id="workratio">
+                                                        Ratio du travail réel comparé à l&#39;estimation
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-summary" data-id="summary">
+                                                        Résumé
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-lastViewed" data-id="lastViewed">
+                                                        Dernier affichage
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-watches" data-id="watches">
+                                                        Observateurs
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-thumbnail" data-id="thumbnail">
+                                                        Images
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-creator" data-id="creator">
+                                                        Créateur
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-subtasks" data-id="subtasks">
+                                                        Sous-tâches
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-created" data-id="created">
+                                                        Création
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-reporter" data-id="reporter">
+                                                        Rapporteur
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-customfield_10000" data-id="customfield_10000">
+                                                        development
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-aggregateprogress" data-id="aggregateprogress">
+                                                        Σ Progrès
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-priority" data-id="priority">
+                                                        Priorité
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-customfield_10001" data-id="customfield_10001">
+                                                        Team
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-labels" data-id="labels">
+                                                        Étiquettes
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-environment" data-id="environment">
+                                                        Environnement
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-customfield_10019" data-id="customfield_10019">
+                                                        Rank
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-timeestimate" data-id="timeestimate">
+                                                        Estimation restante
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-aggregatetimeoriginalestimate" data-id="aggregatetimeoriginalestimate">
+                                                        Σ Estimation originale
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-duedate" data-id="duedate">
+                                                        Date d&#39;échéance
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-progress" data-id="progress">
+                                                        Progression
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-issuelinks" data-id="issuelinks">
+                                                        Tickets liés
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-votes" data-id="votes">
+                                                        Votes
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-assignee" data-id="assignee">
+                                                        Personne assignée
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-updated" data-id="updated">
+                                                        Mise à jour
+                                                    </th>
+                                                
+                                                            <th class="colHeaderLink headerrow-status" data-id="status">
+                                                        État
+                                                    </th>
+                                                                    </tr>
+    </thead>
+    <tbody>
+                    
+
+                <tr id="issuerow10264" rel="10264" data-issuekey="GDP-6" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:28 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-6" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-6">GDP-6</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:28 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Charger le dataset
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:13 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i00067:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            laouine youssef
+    </td>
+                                            <td class="updated"> 12/mars/26 10:28 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10265" rel="10265" data-issuekey="GDP-7" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:28 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-7" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-7">GDP-7</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:28 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Explorer les variables et types
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:14 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0006f:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            laouine youssef
+    </td>
+                                            <td class="updated"> 12/mars/26 10:28 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10266" rel="10266" data-issuekey="GDP-8" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-8" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-8">GDP-8</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Vérifier les valeurs manquantes
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:14 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0006n:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            laouine youssef
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10267" rel="10267" data-issuekey="GDP-9" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-9" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-9">GDP-9</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Détecter les outliers (IQR )
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:14 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0006v:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            laouine youssef
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10268" rel="10268" data-issuekey="GDP-10" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-10" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-10">GDP-10</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Commencer le notebook eda.ipynb
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:14 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i00073:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            laouine youssef
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10269" rel="10269" data-issuekey="GDP-11" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-11" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-11">GDP-11</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Vérifier le déséquilibre de death_event
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:15 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0007b:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            laouine youssef
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10271" rel="10271" data-issuekey="GDP-13" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-13" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-13">GDP-13</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Appliquer SMOTE
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:15 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0007j:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            laouine youssef
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10293" rel="10293" data-issuekey="GDP-35" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 11:04 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-35" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-35">GDP-35</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 11:04 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                EDA Notebook (eda.ipynb)
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            Latifi Chady
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 11:04 PM </td>
+                                            <td class="reporter">            Latifi Chady
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0007n:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Latifi Chady
+    </td>
+                                            <td class="updated"> 12/mars/26 11:04 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10272" rel="10272" data-issuekey="GDP-14" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:16 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-14" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-14">GDP-14</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-yellow
+            jira-issue-status-lozenge-max-width-medium">En cours</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    <em>Non résolu</em>
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> &nbsp; </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Analyser la corrélation des features
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:16 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0007r:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            laouine youssef
+    </td>
+                                            <td class="updated"> 12/mars/26 10:44 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-yellow jira-issue-status-lozenge-indeterminate aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;En cours&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;jira-issue-status-tooltip-desc&quot;&gt;Ce ticket est en cours de traitement par la personne assignée.&lt;/span&gt;">En cours</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10273" rel="10273" data-issuekey="GDP-15" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 11:01 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-15" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-15">GDP-15</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 11:01 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Documenter les résultats dans le notebook
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:16 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0007z:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Latifi Chady
+    </td>
+                                            <td class="updated"> 12/mars/26 11:01 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10274" rel="10274" data-issuekey="GDP-16" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 11:04 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-16" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-16">GDP-16</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 11:04 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Créer src/data_processing.py
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:17 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i00087:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Latifi Chady
+    </td>
+                                            <td class="updated"> 12/mars/26 11:04 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10275" rel="10275" data-issuekey="GDP-17" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 11:04 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-17" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-17">GDP-17</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 11:04 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Implémenter optimize_memory(df)
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:17 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0008f:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Latifi Chady
+    </td>
+                                            <td class="updated"> 12/mars/26 11:04 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10276" rel="10276" data-issuekey="GDP-18" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-18" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-18">GDP-18</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Créer src/train_model.py
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:17 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0008n:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Maleu Ivan Emmanuel Rabe
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10277" rel="10277" data-issuekey="GDP-19" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-19" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-19">GDP-19</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Entraîner 3 modèles : Logistic Regression Random Forest XGBoost
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:18 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0008v:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Maleu Ivan Emmanuel Rabe
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10278" rel="10278" data-issuekey="GDP-20" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-20" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-20">GDP-20</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Calculer Accuracy, Precision, Recall, F1, ROC-AUC
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:18 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i00093:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Maleu Ivan Emmanuel Rabe
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10279" rel="10279" data-issuekey="GDP-21" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-21" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-21">GDP-21</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Choisir le meilleur modèle
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:18 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0009b:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Maleu Ivan Emmanuel Rabe
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10280" rel="10280" data-issuekey="GDP-22" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-22" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-22">GDP-22</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Implémenter SHAP
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:18 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0009j:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Mostafa Amine Zakani
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10281" rel="10281" data-issuekey="GDP-23" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-23" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-23">GDP-23</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Générer SHAP summary plot
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:18 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0009r:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Mostafa Amine Zakani
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10282" rel="10282" data-issuekey="GDP-24" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-24" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-24">GDP-24</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Générer SHAP summary plot
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:19 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i0009z:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Mostafa Amine Zakani
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10283" rel="10283" data-issuekey="GDP-25" class="issuerow">
+                                            <td class="statuscategorychangedate"> 13/mars/26 1:57 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-25" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-25">GDP-25</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 13/mars/26 1:57 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Ajouter formulaire patient + prédiction
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:19 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i000a7:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            aboufouzia mohamed yahya
+    </td>
+                                            <td class="updated"> 13/mars/26 1:57 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10285" rel="10285" data-issuekey="GDP-27" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 10:29 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-27" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-27">GDP-27</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 10:29 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Ajouter visualisations SHAP
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:19 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i000an:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Mostafa Amine Zakani
+    </td>
+                                            <td class="updated"> 12/mars/26 10:29 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10286" rel="10286" data-issuekey="GDP-28" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 11:04 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-28" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-28">GDP-28</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 11:04 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Ajouter tests dans tests/
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:19 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i000av:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Latifi Chady
+    </td>
+                                            <td class="updated"> 12/mars/26 11:04 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10287" rel="10287" data-issuekey="GDP-29" class="issuerow">
+                                            <td class="statuscategorychangedate"> 13/mars/26 1:57 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-29" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-29">GDP-29</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 13/mars/26 1:57 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Créer requirements.txt
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:20 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i000b3:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            aboufouzia mohamed yahya
+    </td>
+                                            <td class="updated"> 13/mars/26 1:57 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10289" rel="10289" data-issuekey="GDP-31" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 11:01 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-31" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-31">GDP-31</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 11:01 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Rédiger README.md
+    </p>
+</td>
+                                            <td class="lastViewed"> 12/mars/26 10:40 PM </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:26 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i000bb:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Latifi Chady
+    </td>
+                                            <td class="updated"> 12/mars/26 11:01 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10290" rel="10290" data-issuekey="GDP-32" class="issuerow">
+                                            <td class="statuscategorychangedate"> 13/mars/26 1:58 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-32" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-32">GDP-32</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 13/mars/26 1:58 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Créer l’interface Streamlit (app/app.py)
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:40 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i000bj:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            aboufouzia mohamed yahya
+    </td>
+                                            <td class="updated"> 13/mars/26 1:58 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10291" rel="10291" data-issuekey="GDP-33" class="issuerow">
+                                            <td class="statuscategorychangedate"> 13/mars/26 1:58 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-33" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-33">GDP-33</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 13/mars/26 1:58 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                Connecter modèle + interface
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            laouine youssef
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 10:41 PM </td>
+                                            <td class="reporter">            laouine youssef
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i000br:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            aboufouzia mohamed yahya
+    </td>
+                                            <td class="updated"> 13/mars/26 1:58 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+
+
+                <tr id="issuerow10292" rel="10292" data-issuekey="GDP-34" class="issuerow">
+                                            <td class="statuscategorychangedate"> 12/mars/26 11:04 PM </td>
+                                            <td class="issuetype">    Tâche
+</td>
+                                            <td class="issuekey">
+
+    <a class="issue-link" data-issue-key="GDP-34" href="https://centrale-casablanca-team-ecj2g438.atlassian.net/browse/GDP-34">GDP-34</a>
+</td>
+                                            <td class="customfield_10091"></td>
+                                            <td class="customfield_10092"></td>
+                                            <td class="timespent"></td>
+                                            <td class="timeoriginalestimate"></td>
+                                            <td class="project">    CODING WEEK GRP1
+</td>
+                                            <td class="description"></td>
+                                            <td class="statusCategory">
+    <span class="aui-lozenge aui-lozenge-subtle jira-issue-status-lozenge jira-issue-status-lozenge-green
+            jira-issue-status-lozenge-max-width-medium">Terminé</span>
+</td>
+                                            <td class="aggregatetimespent"></td>
+                                            <td class="parent"></td>
+                                            <td class="resolution">    Terminé
+</td>
+                                            <td class="customfield_10015"></td>
+                                            <td class="security"></td>
+                                            <td class="aggregatetimeestimate"></td>
+                                            <td class="resolutiondate"> 12/mars/26 11:04 PM </td>
+                                            <td class="workratio">&nbsp;
+</td>
+                                            <td class="summary"><p>
+                organisation de la structure du projet
+    </p>
+</td>
+                                            <td class="lastViewed"> &nbsp; </td>
+                                            <td class="watches">1</td>
+                                            <td class="thumbnail"></td>
+                                            <td class="creator">            Latifi Chady
+    </td>
+                                            <td class="subtasks"></td>
+                                            <td class="created"> 12/mars/26 11:02 PM </td>
+                                            <td class="reporter">            Latifi Chady
+    </td>
+                                            <td class="customfield_10000"></td>
+                                            <td class="aggregateprogress"></td>
+                                            <td class="priority">           Medium
+    </td>
+                                            <td class="customfield_10001">    Aucun(e)
+</td>
+                                            <td class="labels"></td>
+                                            <td class="environment"></td>
+                                            <td class="customfield_10019">      0|i000bz:
+  </td>
+                                            <td class="timeestimate"></td>
+                                            <td class="aggregatetimeoriginalestimate"></td>
+                                            <td class="duedate">    &nbsp;
+</td>
+                                            <td class="progress"></td>
+                                            <td class="issuelinks"></td>
+                                            <td class="votes">0</td>
+                                            <td class="assignee">            Latifi Chady
+    </td>
+                                            <td class="updated"> 12/mars/26 11:04 PM </td>
+                                            <td class="status">
+                <span class=" jira-issue-status-lozenge aui-lozenge jira-issue-status-lozenge-green jira-issue-status-lozenge-done aui-lozenge-subtle jira-issue-status-lozenge-max-width-medium" data-tooltip="&lt;span class=&quot;jira-issue-status-tooltip-title&quot;&gt;Terminé(e)&lt;/span&gt;">Terminé(e)</span>    </td>
+                    </tr>
+        </tbody>
+    </table>
+    <div class="end-of-stable-message"></div>
+            <table border="1" >
+<tr>
+    <td bgcolor="#dddddd" colspan="42"><font size="1">
+        Généré à Sun Mar 15 00:14:32 UTC 2026 par laouine youssef avec JIRA 1001.0.0-SNAPSHOT#100291-rev:f56d3133991a4abae1b3282cc1b7dd184d512591.
+    </font></td>
+</tr>
+</table>
+
+</body>
+</html>
